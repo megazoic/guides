@@ -168,11 +168,11 @@ module Bookshelf
 end
 ```
 
-Just like actions, every view in a Hanami app is an individual class. Views prepare the vaues to be passed to a template, then render that template to generate their output.
+Just like actions, every view in a Hanami app is an individual class. Views prepare the values to be passed to a template, then render that template to generate their output.
 
 We can find this view's template in our `app` directory at `app/templates/home/show.html.erb`. Let's adjust this template to include our desired "Welcome to Bookshelf" text.
 
-```sql
+```ruby
 # app/templates/home/show.html.erb
 
 <h1>Welcome to Bookshelf</h1>
@@ -194,6 +194,7 @@ Request specs like these are suitable for testing API endpoints, but since we'll
 To install Capybara, add it to your Gemfile in the `:test` group, and then run `bundle install`.
 
 ```ruby
+# Gemfile
 group :test do
   gem "capybara"
 end
@@ -202,6 +203,7 @@ end
 Add the following to a `spec/support/capybara.rb` file:
 
 ```ruby
+# spec/support/capybara.rb
 require "capybara/rspec"
 
 Capybara.app = Hanami.app
@@ -210,12 +212,14 @@ Capybara.app = Hanami.app
 And append the following line to `spec/spec_helper.rb`:
 
 ```ruby
+# spec/spec_helper.rb
 require_relative "support/capybara"
 ```
 
 Then delete the `spec/requests/root_spec.rb` and replace it with a Capybara-driven test at `spec/features/home_spec.rb`:
 
 ```ruby
+# spec/features/home_spec.rb
 RSpec.feature "Home" do
   scenario "visiting the home page shows a welcome message" do
     visit "/"
@@ -266,6 +270,7 @@ $ bundle exec hanami generate action books.index
 In addition to generating an action at `app/actions/books/index.rb` and a view at `app/views/books/index.rb`, the generator has also added a route in `config/routes.rb`:
 
 ```ruby
+# config/routes.rb
 module Bookshelf
   class Routes < Hanami::Routes
     root to: "home.show"
@@ -315,7 +320,7 @@ end
 
 Then we can update our template to present the books:
 
-```sql
+```ruby
 <!-- app/templates/books/index.html.erb -->
 
 <h1>Books</h1>
@@ -340,7 +345,7 @@ Books index
 
 ### Adding persistence using ROM
 
-Let's add just enough ROM to get persistence working using Postgres.
+Let's add just enough <a href="https://rom-rb.org/learn/">ROM</a> to get persistence working using Postgres.
 
 First, add these gems to the Gemfile and run `bundle install`:
 
@@ -371,6 +376,7 @@ In Hanami, [providers](/v2.1/app/providers/) offer a mechanism for configuring a
 Copy and paste the following provider into a new file at `config/providers/persistence.rb`:
 
 ```ruby
+# config/providers/persistence.rb
 Hanami.app.register_provider :persistence, namespace: true do
   prepare do
     require "rom"
@@ -505,6 +511,7 @@ end
 And then append the following line to `spec/spec_helper.rb`:
 
 ```ruby
+# spec/spec_helper.rb
 require_relative "support/database_cleaner"
 ```
 
